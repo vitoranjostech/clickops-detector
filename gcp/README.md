@@ -2,7 +2,7 @@
 
 Alerts you when someone changes a GCP project by hand instead of through your pipeline.
 
-[Português](README-pt-br.md)
+English | [Português](README-pt-br.md)
 
 ## What it does
 

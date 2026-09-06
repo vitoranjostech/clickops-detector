@@ -2,7 +2,7 @@
 
 Alerts you when someone changes cloud infrastructure by hand instead of through your pipeline.
 
-[Português](README-pt-br.md)
+English | [Português](README-pt-br.md)
 
 Manual changes in a cloud console never reach your state file. The console is an API client,
 though, and every write it makes lands in the audit log. This turns those entries into a

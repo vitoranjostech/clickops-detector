@@ -2,7 +2,7 @@
 
 Avisa quando alguém altera infraestrutura na mão em vez de pelo pipeline.
 
-[English](README.md)
+[English](README.md) | Português
 
 Alteração manual no console nunca chega ao seu state file. Mas o console é um cliente da API,
 e toda escrita que ele faz cai no audit log. Isso transforma essas entradas em métrica e
