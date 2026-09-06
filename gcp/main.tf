@@ -88,6 +88,11 @@ resource "google_monitoring_alert_policy" "clickops" {
 
   notification_channels = [google_monitoring_notification_channel.email.id]
 
+  alert_strategy {
+    # Notify when the incident opens, not when it closes.
+    notification_prompts = ["OPENED"]
+  }
+
   documentation {
     mime_type = "text/markdown"
     content   = <<-EOT

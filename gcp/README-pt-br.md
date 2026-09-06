@@ -81,7 +81,8 @@ positivo encontrado em produção.
 - Data Access fica fora do escopo: desligado por padrão, volume alto e não necessário aqui.
 - `duration = "0s"` com `alignment_period = "900s"` dá 15 minutos para o log chegar sem
   deixar de disparar num evento único.
-- O Cloud Monitoring envia notificação de resolved quando a condição limpa.
+- `notification_prompts = ["OPENED"]` impede o Cloud Monitoring de mandar uma segunda
+  notificação quando o incidente fecha.
 - O alerta vai por e-mail via Cloud Monitoring. Encaminhar para Grafana, PagerDuty ou outra
   ferramenta de observabilidade está fora do escopo aqui. Troque o canal de notificação pelo
   que o seu setup usa.
