@@ -82,6 +82,6 @@ found in production.
 - `duration = "0s"` with `alignment_period = "900s"` gives the log 15 minutes to arrive while
   still firing on a single event.
 - Cloud Monitoring sends a resolved notification when the condition clears.
-- The alert goes to email through Cloud Monitoring, which keeps the module small. Routing it
-  to Grafana, PagerDuty, or another observability tool is out of scope here. Replace the
-  notification channel with whatever your setup uses.
+- The alert goes to email through Cloud Monitoring. Routing it to Grafana, PagerDuty, or
+  another observability tool is out of scope here. Replace the notification channel with the
+  one your setup uses.
