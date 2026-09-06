@@ -6,14 +6,14 @@ English | [Português](README-pt-br.md)
 
 ## What it does
 
-Every write in the Console hits the API, and every write to the API lands in the Cloud Audit
+Every write in the Console goes through the API, and the API records it in the Cloud Audit
 Log. This turns those entries into a metric and alerts when the count goes above zero:
 
 ```
 Console click → API call → Admin Activity log → log-based metric → email alert
 ```
 
-The alert carries the principal, service, method, and resource. It reads Admin Activity,
+The alert includes the principal, service, method, and resource. It reads Admin Activity,
 which is enabled by default and has no ingestion cost.
 
 ## Usage
@@ -68,8 +68,8 @@ counter is in Monitoring → Metrics Explorer under
 | `NOT methodName=~".*\.(get\|list\|watch)$"` | Reads, lowercase k8s convention |
 | `NOT methodName=~".*\.(Get\|List\|Watch)[A-Za-z0-9]+$"` | Reads, CamelCase Google API convention |
 
-The Logging query language accepts `--` comments, so each exclusion is documented inline in
-`main.tf`.
+The Logging query language accepts `--` comments, so `main.tf` documents each exclusion
+inline.
 
 Expect to add entries. Every exclusion below the read filters came from a false positive
 found in production.

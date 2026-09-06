@@ -12,7 +12,7 @@ provider "google" {
   project = var.project_id
 }
 
-# 1. The counter: every write made by a human in the Audit Log adds 1.
+# Counts every write a human makes in the audit log.
 resource "google_logging_metric" "clickops" {
   name        = "clickops_count"
   description = "Changes made by human principals outside the IaC pipeline."
@@ -57,7 +57,7 @@ resource "google_logging_metric" "clickops" {
   }
 }
 
-# 2. The alert: anything above zero in the window pages you.
+# Fires when that count goes above zero.
 resource "google_monitoring_alert_policy" "clickops" {
   display_name = "ClickOps detected"
   combiner     = "OR"

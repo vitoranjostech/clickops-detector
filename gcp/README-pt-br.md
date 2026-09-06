@@ -68,8 +68,8 @@ contador fica em Monitoring → Metrics Explorer, em
 | `NOT methodName=~".*\.(get\|list\|watch)$"` | Leituras, convenção k8s em minúsculo |
 | `NOT methodName=~".*\.(Get\|List\|Watch)[A-Za-z0-9]+$"` | Leituras, convenção CamelCase das APIs Google |
 
-A query language do Logging aceita comentários com `--`, então cada exclusão está documentada
-inline no `main.tf`.
+A query language do Logging aceita comentários com `--`, então o `main.tf` documenta cada
+exclusão inline.
 
 Espere adicionar entradas. Toda exclusão abaixo dos filtros de leitura veio de um falso
 positivo encontrado em produção.
