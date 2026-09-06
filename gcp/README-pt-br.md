@@ -82,3 +82,6 @@ positivo encontrado em produção.
 - `duration = "0s"` com `alignment_period = "900s"` dá 15 minutos para o log chegar sem
   deixar de disparar num evento único.
 - O Cloud Monitoring envia notificação de resolved quando a condição limpa.
+- O alerta vai por e-mail via Cloud Monitoring, o que mantém o módulo pequeno. Encaminhar
+  para Grafana, PagerDuty ou outra ferramenta de observabilidade está fora do escopo aqui.
+  Troque o canal de notificação pelo que o seu setup usa.
