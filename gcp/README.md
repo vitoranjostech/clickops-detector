@@ -1,4 +1,4 @@
-# clickops-detector — GCP
+# clickops-detector for GCP
 
 Alerts you when someone changes a GCP project by hand instead of through your pipeline.
 
@@ -7,7 +7,7 @@ English | [Portuguese](README-pt-br.md)
 ## What it does
 
 Every write in the Console goes through the API, and the API records it in the Cloud Audit
-Log. This turns those entries into a metric and alerts when the count goes above zero:
+Log. This module turns those entries into a metric and alerts when the count goes above zero:
 
 ```
 Console click → API call → Admin Activity log → log-based metric → email alert
