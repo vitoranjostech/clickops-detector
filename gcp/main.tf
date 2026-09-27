@@ -43,10 +43,22 @@ resource "google_logging_metric" "clickops" {
     value_type  = "INT64"
     unit        = "1"
 
-    labels { key = "principal" value_type = "STRING" }
-    labels { key = "service"   value_type = "STRING" }
-    labels { key = "method"    value_type = "STRING" }
-    labels { key = "resource"  value_type = "STRING" }
+    labels {
+      key        = "principal"
+      value_type = "STRING"
+    }
+    labels {
+      key        = "service"
+      value_type = "STRING"
+    }
+    labels {
+      key        = "method"
+      value_type = "STRING"
+    }
+    labels {
+      key        = "resource"
+      value_type = "STRING"
+    }
   }
 
   label_extractors = {
