@@ -43,10 +43,22 @@ resource "google_logging_metric" "clickops" {
     value_type  = "INT64"
     unit        = "1"
 
-    labels { key = "principal" value_type = "STRING" }
-    labels { key = "service"   value_type = "STRING" }
-    labels { key = "method"    value_type = "STRING" }
-    labels { key = "resource"  value_type = "STRING" }
+    labels {
+      key        = "principal"
+      value_type = "STRING"
+    }
+    labels {
+      key        = "service"
+      value_type = "STRING"
+    }
+    labels {
+      key        = "method"
+      value_type = "STRING"
+    }
+    labels {
+      key        = "resource"
+      value_type = "STRING"
+    }
   }
 
   label_extractors = {
@@ -71,6 +83,10 @@ resource "google_monitoring_alert_policy" "clickops" {
       threshold_value = 0
       duration        = "0s"
 
+      # Closes the incident once the window has no new logs, so the next identical change
+      # opens a new one. The default keeps it open for up to seven days and stays silent.
+      evaluation_missing_data = "EVALUATION_MISSING_DATA_INACTIVE"
+
       aggregations {
         alignment_period     = "900s"
         per_series_aligner   = "ALIGN_SUM"
@@ -86,7 +102,10 @@ resource "google_monitoring_alert_policy" "clickops" {
     }
   }
 
-  notification_channels = [google_monitoring_notification_channel.email.id]
+  notification_channels = concat(
+    google_monitoring_notification_channel.email[*].id,
+    google_monitoring_notification_channel.slack[*].id,
+  )
 
   alert_strategy {
     # Notify only when the incident opens.
@@ -107,10 +126,31 @@ resource "google_monitoring_alert_policy" "clickops" {
 }
 
 resource "google_monitoring_notification_channel" "email" {
+  count        = var.alert_email == null ? 0 : 1
   display_name = "ClickOps alerts"
   type         = "email"
 
   labels = {
     email_address = var.alert_email
   }
+}
+
+resource "google_monitoring_notification_channel" "slack" {
+  count        = var.slack_channel == null ? 0 : 1
+  display_name = "ClickOps alerts (Slack)"
+  type         = "slack"
+
+  labels = {
+    channel_name = var.slack_channel
+  }
+
+  sensitive_labels {
+    auth_token = var.slack_auth_token
+  }
+}
+
+# The email channel used to be a single resource. Keeps existing installs from recreating it.
+moved {
+  from = google_monitoring_notification_channel.email
+  to   = google_monitoring_notification_channel.email[0]
 }
