@@ -10,7 +10,7 @@ Toda escrita no Console passa pela API, e a API registra isso no Cloud Audit Log
 módulo transforma essas entradas em métrica e alerta quando a contagem passa de zero:
 
 ```
-clique no Console → chamada de API → Admin Activity log → log-based metric → alerta por e-mail
+clique no Console → chamada de API → Admin Activity log → log-based metric → alerta no Slack ou por e-mail
 ```
 
 O alerta traz o principal, o serviço, o método e o recurso. Usa o Admin Activity, que vem
@@ -24,9 +24,17 @@ terraform init
 terraform apply
 ```
 
-O Google manda um e-mail de verificação para o canal de notificação. Confirme antes de testar.
+Para o Slack, crie um app do Slack com o escopo `chat:write`, instale, convide o app no canal
+e passe o bot token por variável de ambiente antes do `terraform apply`:
 
-Para testar, altere algo no Console, espere alguns minutos e veja sua caixa de entrada. O
+```bash
+export TF_VAR_slack_auth_token="xoxb-..."
+```
+
+Para e-mail, o Google manda um e-mail de verificação para o canal de notificação. Confirme
+antes de testar.
+
+Para testar, altere algo no Console, espere alguns minutos e veja o Slack ou sua caixa de entrada. O
 contador fica em Monitoring → Metrics Explorer, em
 `logging.googleapis.com/user/clickops_count`.
 
@@ -42,7 +50,9 @@ contador fica em Monitoring → Metrics Explorer, em
 | Nome | Descrição | Tipo |
 |---|---|---|
 | `project_id` | Projeto a monitorar | `string` |
-| `alert_email` | Onde o alerta chega | `string` |
+| `alert_email` | Onde o alerta chega por e-mail. Opcional | `string` |
+| `slack_channel` | Canal do Slack para o alerta, ex.: `#clickops`. Opcional | `string` |
+| `slack_auth_token` | Bot token do Slack com `chat:write`. Sensível, passe como `TF_VAR_slack_auth_token` | `string` |
 
 ## Recursos
 
@@ -50,7 +60,8 @@ contador fica em Monitoring → Metrics Explorer, em
 |---|---|
 | `google_logging_metric.clickops` | Conta escritas humanas no audit log |
 | `google_monitoring_alert_policy.clickops` | Dispara quando a contagem passa de zero |
-| `google_monitoring_notification_channel.email` | Entrega o alerta |
+| `google_monitoring_notification_channel.email` | Entrega o alerta por e-mail, se `alert_email` estiver definido |
+| `google_monitoring_notification_channel.slack` | Entrega o alerta no Slack, se `slack_channel` estiver definido |
 
 ## O filtro
 
@@ -83,6 +94,9 @@ positivo encontrado em produção.
   deixar de disparar num evento único.
 - `notification_prompts = ["OPENED"]` impede o Cloud Monitoring de mandar uma segunda
   notificação quando o incidente fecha.
-- O alerta vai por e-mail via Cloud Monitoring. Encaminhar para Grafana, PagerDuty ou outra
-  ferramenta de observabilidade está fora do escopo aqui. Troque o canal de notificação pelo
+- `evaluation_missing_data = "EVALUATION_MISSING_DATA_INACTIVE"` fecha o incidente quando a
+  janela fica sem log novo. Sem isso, o incidente fica aberto por até sete dias, e a mesma
+  pessoa repetindo a mesma mudança no mesmo recurso não gera alerta de novo.
+- O alerta vai para o Slack ou por e-mail via Cloud Monitoring. Encaminhar para Grafana,
+  PagerDuty ou outra ferramenta de observabilidade está fora do escopo aqui. Troque o canal de notificação pelo
   que o seu setup usa.

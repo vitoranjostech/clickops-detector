@@ -1,2 +1,6 @@
-project_id  = "my-project-id"
-alert_email = "me@example.com"
+project_id = "my-project-id"
+
+# Pick one or both.
+alert_email   = "me@example.com"
+slack_channel = "#clickops"
+# The Slack token goes in an env var: export TF_VAR_slack_auth_token="xoxb-..."
